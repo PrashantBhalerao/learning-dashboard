@@ -12,12 +12,11 @@ async function fetchCourses(): Promise<Course[]> {
       .from("courses")
       .select("*")
       .order("created_at", { ascending: true });
-
     if (error) throw error;
-    if (!data || data.length === 0) return MOCK_COURSES;
+    if (!data?.length) return MOCK_COURSES;
     return data as Course[];
   } catch {
-    // Graceful fallback to mock data if Supabase isn't configured
+    // Graceful fallback — dashboard always renders
     return MOCK_COURSES;
   }
 }
@@ -29,16 +28,12 @@ async function DashboardContent() {
 
 function DashboardSkeleton() {
   return (
-    <div className="grid gap-3" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-      <div style={{ gridColumn: "span 4" }}>
-        <HeroSkeleton />
-      </div>
+    <div className="bento-grid">
+      <div style={{ gridColumn: "span 4" }}><HeroSkeleton /></div>
       {Array.from({ length: 4 }).map((_, i) => (
-        <CourseCardSkeleton key={i} />
+        <div key={i} className="course-span"><CourseCardSkeleton /></div>
       ))}
-      <div style={{ gridColumn: "span 4" }}>
-        <ActivitySkeleton />
-      </div>
+      <div style={{ gridColumn: "span 4" }}><ActivitySkeleton /></div>
     </div>
   );
 }

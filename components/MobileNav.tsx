@@ -2,58 +2,62 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { LayoutDashboard, BookOpen, BarChart2, Trophy, Settings } from "lucide-react";
+import { LayoutDashboard, BookOpen, BarChart3, Trophy, Settings } from "lucide-react";
 
-const NAV_ITEMS = [
-  { id: "dashboard", icon: LayoutDashboard, label: "Home" },
-  { id: "courses", icon: BookOpen, label: "Courses" },
-  { id: "analytics", icon: BarChart2, label: "Stats" },
-  { id: "achievements", icon: Trophy, label: "Awards" },
-  { id: "settings", icon: Settings, label: "Settings" },
+const ITEMS = [
+  { id: "dashboard",    icon: LayoutDashboard, label: "Home" },
+  { id: "courses",      icon: BookOpen,        label: "Courses" },
+  { id: "analytics",   icon: BarChart3,       label: "Stats" },
+  { id: "achievements",icon: Trophy,           label: "Awards" },
+  { id: "settings",    icon: Settings,         label: "More" },
 ];
 
 export function MobileNav() {
-  const [activeId, setActiveId] = useState("dashboard");
+  const [active, setActive] = useState("dashboard");
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 flex items-center justify-around px-4 py-2 z-50 md:hidden"
+      className="mobile-nav fixed bottom-0 left-0 right-0 z-50"
       style={{
-        background: "rgba(13, 17, 23, 0.95)",
+        background: "rgba(11,14,24,0.97)",
         borderTop: "1px solid var(--border)",
-        backdropFilter: "blur(12px)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
-      {NAV_ITEMS.map((item) => {
-        const Icon = item.icon;
-        const isActive = activeId === item.id;
-        return (
-          <button
-            key={item.id}
-            onClick={() => setActiveId(item.id)}
-            className="relative flex flex-col items-center gap-1 px-3 py-1.5"
-          >
-            <Icon
-              size={20}
-              style={{ color: isActive ? "var(--accent-cyan)" : "var(--text-muted)" }}
-            />
-            <span
-              className="text-xs font-medium"
-              style={{ color: isActive ? "var(--accent-cyan)" : "var(--text-muted)" }}
+      <div className="flex items-stretch">
+        {ITEMS.map((item) => {
+          const Icon = item.icon;
+          const isActive = active === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActive(item.id)}
+              className="flex-1 flex flex-col items-center justify-center gap-1 py-3 relative"
             >
-              {item.label}
-            </span>
-            {isActive && (
-              <motion.div
-                layoutId="mobile-active"
-                className="absolute -top-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
-                style={{ background: "var(--accent-cyan)" }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              {isActive && (
+                <motion.div
+                  layoutId="mobile-pill"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 h-0.5 w-8 rounded-full"
+                  style={{ background: "var(--accent-blue)" }}
+                  transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                />
+              )}
+              <Icon
+                size={20}
+                style={{ color: isActive ? "var(--accent-blue)" : "var(--text-muted)" }}
               />
-            )}
-          </button>
-        );
-      })}
+              <span
+                className="text-[10px] font-semibold"
+                style={{ color: isActive ? "var(--accent-blue)" : "var(--text-muted)" }}
+              >
+                {item.label}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 }

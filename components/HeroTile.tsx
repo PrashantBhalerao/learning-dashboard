@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Flame, Star } from "lucide-react";
+import { Flame, Calendar, Clock, TrendingUp, BookOpen } from "lucide-react";
 
 interface HeroTileProps {
   name: string;
@@ -10,91 +10,126 @@ interface HeroTileProps {
 
 export function HeroTile({ name, streak }: HeroTileProps) {
   const hour = new Date().getHours();
-  const greeting =
-    hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const greeting = hour < 5 ? "Good night" : hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const emoji = hour < 12 ? "☀️" : hour < 17 ? "⚡" : "🌙";
+
+  const stats = [
+    { label: "Active Courses", value: "4", icon: BookOpen, color: "var(--accent-blue)" },
+    { label: "Hours This Week", value: "12.5", icon: Clock, color: "var(--accent-violet)" },
+    { label: "Avg. Progress", value: "61%", icon: TrendingUp, color: "var(--accent-emerald)" },
+    { label: "Days Active", value: "23", icon: Calendar, color: "var(--accent-amber)" },
+  ];
 
   return (
     <article
-      className="relative rounded-2xl p-6 overflow-hidden noise-overlay"
+      className="hero-span card grain noise"
       style={{
-        background: "linear-gradient(135deg, #0f1923 0%, #0d1520 50%, #0a1118 100%)",
-        border: "1px solid var(--border)",
-        gridColumn: "span 2",
+        gridColumn: "span 4",
+        background: "linear-gradient(135deg, #0c1220 0%, #0f1628 40%, #0c1220 100%)",
+        minHeight: 200,
+        padding: "28px 32px",
       }}
     >
-      {/* Background glow orbs */}
-      <div
-        className="absolute -top-16 -right-16 w-64 h-64 rounded-full opacity-20 pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, var(--accent-cyan) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-      <div
-        className="absolute -bottom-8 left-1/3 w-48 h-48 rounded-full opacity-10 pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, var(--accent-purple) 0%, transparent 70%)",
-          filter: "blur(30px)",
-        }}
-      />
-
-      <div className="relative z-10 flex items-start justify-between flex-wrap gap-4">
-        <div>
-          <p
-            className="text-sm font-medium font-mono-custom mb-1"
-            style={{ color: "var(--accent-cyan)" }}
-          >
-            {greeting},
-          </p>
-          <h1 className="text-4xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>
-            {name} 👋
-          </h1>
-          <p className="mt-2 text-sm" style={{ color: "var(--text-secondary)" }}>
-            You&apos;re on a roll. Keep the momentum going today.
-          </p>
-        </div>
-
-        {/* Streak indicator */}
-        <div
-          className="flex items-center gap-2 px-4 py-3 rounded-xl"
-          style={{
-            background: "rgba(251, 191, 36, 0.08)",
-            border: "1px solid rgba(251, 191, 36, 0.2)",
-          }}
-        >
-          <motion.div
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <Flame size={24} style={{ color: "var(--accent-amber)" }} />
-          </motion.div>
-          <div>
-            <p className="text-2xl font-bold" style={{ color: "var(--accent-amber)" }}>
-              {streak}
-            </p>
-            <p className="text-xs" style={{ color: "var(--text-muted)" }}>
-              day streak
-            </p>
-          </div>
-        </div>
+      {/* BG glow orbs */}
+      <div className="absolute inset-0 overflow-hidden rounded-[16px] pointer-events-none" style={{ zIndex: 0 }}>
+        <div style={{
+          position: "absolute", top: -60, right: -40, width: 280, height: 280,
+          background: "radial-gradient(circle, rgba(79,158,255,0.14) 0%, transparent 70%)",
+          filter: "blur(32px)",
+        }} />
+        <div style={{
+          position: "absolute", bottom: -40, left: "30%", width: 200, height: 200,
+          background: "radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)",
+          filter: "blur(28px)",
+        }} />
+        {/* Dot grid pattern */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+          borderRadius: "inherit",
+        }} />
       </div>
 
-      {/* Progress stats row */}
-      <div className="relative z-10 mt-6 flex items-center gap-6">
-        {[
-          { label: "Courses active", value: "4", icon: Star },
-          { label: "Hours this week", value: "12.5h", icon: Star },
-          { label: "Completion rate", value: "61%", icon: Star },
-        ].map((stat, i) => (
-          <div key={i} className="flex flex-col">
-            <span className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>
-              {stat.value}
-            </span>
-            <span className="text-xs font-mono-custom" style={{ color: "var(--text-muted)" }}>
-              {stat.label}
-            </span>
+      <div className="relative" style={{ zIndex: 2 }}>
+        {/* Top row: greeting + streak */}
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-xs font-semibold uppercase tracking-[0.15em] font-mono"
+                style={{ color: "var(--accent-blue)" }}
+              >
+                {greeting}
+              </span>
+              <span>{emoji}</span>
+            </div>
+            <h1 className="font-bold leading-tight" style={{ fontSize: "clamp(24px, 4vw, 36px)", color: "var(--text-primary)" }}>
+              Welcome back, {name}
+            </h1>
+            <p className="mt-1.5 text-sm" style={{ color: "var(--text-secondary)", maxWidth: 380 }}>
+              You have <span style={{ color: "var(--accent-blue)", fontWeight: 600 }}>3 lessons</span> scheduled today.
+              Your next session starts in 45 minutes.
+            </p>
           </div>
-        ))}
+
+          {/* Streak badge */}
+          <motion.div
+            whileHover={{ scale: 1.04 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="flex items-center gap-3 rounded-2xl px-5 py-3.5 shrink-0"
+            style={{
+              background: "rgba(245,158,11,0.08)",
+              border: "1px solid rgba(245,158,11,0.22)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <motion.div
+              animate={{ scale: [1, 1.18, 1], rotate: [0, -8, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Flame size={28} style={{ color: "var(--accent-amber)" }} />
+            </motion.div>
+            <div>
+              <p className="text-2xl font-bold leading-none" style={{ color: "var(--accent-amber)" }}>
+                {streak}
+              </p>
+              <p className="text-xs mt-0.5 font-medium" style={{ color: "rgba(245,158,11,0.65)" }}>
+                day streak 🔥
+              </p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Stats row */}
+        <div className="grid gap-3 mt-6" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))" }}>
+          {stats.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 + i * 0.06, duration: 0.4 }}
+                className="rounded-xl px-4 py-3"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.06)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <Icon size={13} style={{ color: s.color }} />
+                  <span className="text-xs font-mono" style={{ color: "var(--text-muted)" }}>
+                    {s.label}
+                  </span>
+                </div>
+                <p className="text-xl font-bold" style={{ color: "var(--text-primary)" }}>
+                  {s.value}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
     </article>
   );

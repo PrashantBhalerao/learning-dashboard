@@ -6,25 +6,15 @@ import { HeroTile } from "./HeroTile";
 import { CourseCard } from "./CourseCard";
 import { ActivityTile } from "./ActivityTile";
 
-const CONTAINER_VARIANTS = {
+const container = {
   hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
 };
-
-const TILE_VARIANTS = {
-  hidden: { opacity: 0, y: 24 },
+const tile = {
+  hidden: { opacity: 0, y: 28 },
   visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring" as const,
-      stiffness: 280,
-      damping: 24,
-    },
+    opacity: 1, y: 0,
+    transition: { type: "spring" as const, stiffness: 260, damping: 22 },
   },
 };
 
@@ -36,28 +26,25 @@ interface BentoGridProps {
 export function BentoGrid({ courses, activity }: BentoGridProps) {
   return (
     <motion.div
-      className="grid gap-3"
-      style={{
-        gridTemplateColumns: "repeat(4, 1fr)",
-      }}
-      variants={CONTAINER_VARIANTS}
+      className="bento-grid"
+      variants={container}
       initial="hidden"
       animate="visible"
     >
-      {/* Hero — spans full width */}
-      <motion.div variants={TILE_VARIANTS} style={{ gridColumn: "span 4" }}>
+      {/* Hero — full width */}
+      <motion.div variants={tile} style={{ gridColumn: "span 4" }}>
         <HeroTile name="Alex" streak={14} />
       </motion.div>
 
-      {/* Course cards — each takes 1 col */}
+      {/* Course cards */}
       {courses.map((course, i) => (
-        <motion.div key={course.id} variants={TILE_VARIANTS}>
+        <motion.div key={course.id} variants={tile} className="course-span">
           <CourseCard course={course} index={i} />
         </motion.div>
       ))}
 
-      {/* Activity tile — spans 4 cols */}
-      <motion.div variants={TILE_VARIANTS} style={{ gridColumn: "span 4" }}>
+      {/* Activity tile — full width */}
+      <motion.div variants={tile} style={{ gridColumn: "span 4" }}>
         <ActivityTile data={activity} />
       </motion.div>
     </motion.div>

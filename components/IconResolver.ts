@@ -1,34 +1,16 @@
 import {
-  Code2,
-  FileCode,
-  Network,
-  Cloud,
-  Database,
-  Globe,
-  Cpu,
-  Terminal,
-  Layers,
-  BookOpen,
-  Brain,
-  Rocket,
+  Code2, FileCode, Network, Cloud, Database,
+  Globe, Cpu, Terminal, Layers, BookOpen, Brain,
+  Rocket, FlaskConical, Palette, Music, Camera,
   type LucideIcon,
 } from "lucide-react";
 
-const ICON_MAP: Record<string, LucideIcon> = {
-  Code2,
-  FileCode,
-  Network,
-  Cloud,
-  Database,
-  Globe,
-  Cpu,
-  Terminal,
-  Layers,
-  BookOpen,
-  Brain,
-  Rocket,
+const MAP: Record<string, LucideIcon> = {
+  Code2, FileCode, Network, Cloud, Database,
+  Globe, Cpu, Terminal, Layers, BookOpen, Brain,
+  Rocket, FlaskConical, Palette, Music, Camera,
 };
 
 export function getIcon(name: string): LucideIcon {
-  return ICON_MAP[name] ?? BookOpen;
+  return MAP[name] ?? BookOpen;
 }
